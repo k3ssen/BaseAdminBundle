@@ -1,0 +1,5 @@
+{# @var meta_entity \K3ssen\MetaEntityBundle\MetaData\MetaEntityInterface #}
+{% use '@!EntityGenerator/skeleton/repository/_traits.php.twig' %}
+{% block traits %}{{ parent() }}
+use PersistableEntityRepositoryTrait;
+{% endblock %}

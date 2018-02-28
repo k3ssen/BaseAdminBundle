@@ -1,0 +1,14 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $projectDir: '%kernel.project_dir%'
+            $bundles: '%kernel.bundles%'
+
+    K3ssen\BaseAdminBundle\:
+        resource: '../../*'
+        exclude: '../../{Entity,Migrations,Tests}'

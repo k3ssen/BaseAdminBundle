@@ -1,0 +1,26 @@
+{# @var meta_entity \K3ssen\MetaEntityBundle\MetaData\MetaEntityInterface #}
+{% block new_action %}
+
+    /**
+    * @Route("/new", name="{{ route_prefix }}_new")
+    * @Method({"GET", "POST"})
+    */
+    public function newAction(Request $request, {{ meta_entity.name }}Repository $repo): Response
+    {
+        ${{ entity_variable }} = new {{ meta_entity.name  }}();
+        $form = $this->createForm({{ meta_entity.name }}Type::class, ${{ entity_variable }});
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repo->save(${{ entity_variable }});
+
+            $this->addFlash('success', 'Created new {{ meta_entity.name }}');
+
+    return $this->redirectToRoute('{{ route_prefix }}_show', ['{{ id_name }}' => ${{ entity_variable }}->{{ id_getter }}]);
+        }
+        return $this->render('{{ view_prefix }}/new.html.twig', [
+            '{{ meta_entity.name | tabalize }}' => ${{ entity_variable }},
+            'form' => $form->createView(),
+        ]);
+    }
+{% endblock %}

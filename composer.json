@@ -1,0 +1,45 @@
+{
+    "name": "k3ssen/base-admin",
+    "description": "Provides base classes for your symfony4 project",
+    "keywords": ["base", "admin", "abstract", "symfony", "symfony4"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kevin Driessen",
+            "email": "k3ssen@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "symfony/yaml": "~4.0",
+        "symfony/config": "~4.0",
+        "symfony/dependency-injection": "~4.0",
+        "symfony/process": "~4.0",
+        "symfony/validator": "~4.0",
+        "symfony/orm-pack": "~1.0"
+    },
+    "suggest": {
+        "k3ssen/crud-generator": "dev-master",
+        "k3ssen/entity-generator": "dev-master"
+    },
+    "autoload": {
+        "psr-4": { "K3ssen\\BaseAdminBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "scripts": {
+        "auto-scripts": {
+            "admin:generator-skeleton-override": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    }
+}
