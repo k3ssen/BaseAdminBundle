@@ -1,13 +1,12 @@
-parameters:
+# TODO: define aliased services explicitly, see: http://symfony.com/doc/current/bundles/best_practices.html#services
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: false
-        bind:
-            $projectDir: '%kernel.project_dir%'
-            $bundles: '%kernel.bundles%'
+
+    Sg\DatatablesBundle\Response\DatatableResponse: '@sg_datatables.response'
 
     K3ssen\BaseAdminBundle\:
         resource: '../../*'

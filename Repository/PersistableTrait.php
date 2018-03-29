@@ -3,8 +3,13 @@ declare(strict_types=1);
 
 namespace K3ssen\BaseAdminBundle\Repository;
 
-trait PersistableEntityRepositoryTrait
+use Doctrine\ORM\EntityManager;
+
+trait PersistableTrait
 {
+    /** @var EntityManager */
+    protected $_em;
+
     public function save($entity, $flush = true)
     {
         $this->_em->persist($entity);
