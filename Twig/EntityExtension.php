@@ -8,7 +8,7 @@ class EntityExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('class', [$this, 'getClassShortName']),
+            new \Twig_SimpleFunction('class_name', [$this, 'getClassShortName']),
         ];
     }
 

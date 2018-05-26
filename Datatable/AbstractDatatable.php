@@ -203,7 +203,7 @@ abstract class AbstractDatatable extends SgDatatable
     protected function checkIsGranted($voterSuffix, $entryId): bool
     {
         return static::USE_VOTER_CHECK === false || $this->authorizationChecker->isGranted(
-            strtoupper($this->getEntityName().'_'.$voterSuffix),
+            strtoupper($this->getRoute($voterSuffix)),
             $this->getEntityManager()->getReference($this->getEntity(), $entryId)
         );
     }

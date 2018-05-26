@@ -1,5 +1,9 @@
 {% set current_route = app.request.attributes.get('_route') %}
-{% set action_prefix = (action_prefix is defined ? action_prefix : class(entity)) | lower %}
+{% if action_prefix is not defined %}
+    {% set entity_name = class_name(entity)|tabalize %}
+    {% set subdir_part = current_route | split(entity_name) %}
+    {% set action_prefix = subdir_part[0] ~ entity_name %}
+{% endif %}
 {% set voter_prefix = action_prefix | upper %}
 {% set vote = vote is defined and vote ? true : false %}
 
