@@ -1,0 +1,35 @@
+{% set current_route = app.request.attributes.get('_route') %}
+{% set action_prefix = (action_prefix is defined ? action_prefix : class(entity)) | lower %}
+{% set voter_prefix = action_prefix | upper %}
+{% set vote = vote is defined and vote ? true : false %}
+
+{% if '_index' not in current_route and (vote == false or is_granted(voter_prefix~'_INDEX')) %}
+    <a href="{{ path(action_prefix~'_index') }}" class="btn btn-default">
+        <span class="fa fa-list"></span>
+        <span class="hidden-xs hidden-sm">Overview</span>
+    </a>
+{% endif %}
+{% if ('_edit' in current_route or '_delete' in current_route) and (vote == false or is_granted(voter_prefix~'_VIEW', entity)) %}
+    <a href="{{ path(action_prefix~'_show', entity) }}" class="btn btn-default">
+        <span class="fa fa-search-plus"></span>
+        <span class="hidden-xs hidden-sm">Details</span>
+    </a>
+{% endif %}
+{% if '_show' in current_route and (vote == false or is_granted(voter_prefix~'_DELETE', entity)) %}
+    <a href="{{ path(action_prefix~'_delete', entity) }}" class="btn btn-danger">
+        <span class="fa fa-trash"></span>
+        <span class="hidden-xs hidden-sm">Delete</span>
+    </a>
+{% endif %}
+{% if '_show' in current_route and (vote == false or is_granted(voter_prefix~'_EDIT', entity)) %}
+    <a href="{{ path(action_prefix~'_edit', entity) }}" class="btn btn-warning">
+        <span class="fa fa-pencil"></span>
+        <span class="hidden-xs hidden-sm">Edit</span>
+    </a>
+{% endif %}
+{% if '_index' in current_route and (vote == false or is_granted(voter_prefix~'_CREATE', entity)) %}
+    <a href="{{ path(action_prefix~'_new') }}" class="btn btn-success">
+        <span class="fa fa-plus"></span>
+        <span class="hidden-xs hidden-sm">New</span>
+    </a>
+{% endif %}

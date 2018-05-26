@@ -1,0 +1,15 @@
+{% extends '@BaseAdmin/layout/components/entity_box.html.twig' %}
+
+{% block box_body %}
+    {% block main_content %}{% endblock %}
+    {% block box_body_form %}
+        {{ form_start(form) }}
+        {% block box_body_form_widget %}
+            {{ form_widget(form) }}
+        {% endblock %}
+        {% block box_body_form_buttons %}
+            <button class="btn btn-{{ btn_type|default('primary') }}">{{ btn_text|default('Save') }}</button>
+        {% endblock %}
+        {{ form_end(form) }}
+    {% endblock %}
+{% endblock %}

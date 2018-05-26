@@ -7,64 +7,62 @@ class ComponentExtension extends \Twig_Extension
 {
     protected static $optionsEnvAndSafe = [
         'needs_environment' => true,
+        'needs_context' => true,
         'is_safe' => ['html']
     ];
 
     public function getTokenParsers()
     {
         return [
-            new ComponentParser('box_body'),
+            new SetComponentParser($this->getFunctions())
         ];
     }
 
     public function getFunctions()
     {
+        //Note that functions without key (string) won't be be used by the SetComponentParser
         return [
-//            new \Twig_SimpleFunction('box', [$this, 'renderBox'], static::$optionsEnvAndSafe),
-            new \Twig_SimpleFunction('button', [$this, 'renderButton'], static::$optionsEnvAndSafe),
-            new \Twig_SimpleFunction('icon', [$this, 'renderIcon'], static::$optionsEnvAndSafe),
+            '@BaseAdmin/layout/components/box.html.twig' => new \Twig_SimpleFunction(
+                'box',
+                [$this, 'box'],
+                static::$optionsEnvAndSafe
+            ),
+            '@BaseAdmin/layout/components/entity_box.html.twig' => new \Twig_SimpleFunction(
+                'entity_box',
+                [$this, 'entityBox'],
+                static::$optionsEnvAndSafe
+            ),
+            '@BaseAdmin/layout/components/entity_form_box.html.twig' => new \Twig_SimpleFunction(
+                'entity_form_box',
+                [$this, 'entityFormBox'],
+                static::$optionsEnvAndSafe
+            ),
         ];
     }
 
-    public function getFilters()
+    public function box(\Twig_Environment $environment, array $context = [], string $title = null)
     {
-        return [
-//            new \Twig_SimpleFilter('box', [$this, 'renderBox'], static::$optionsEnvAndSafe),
-        ];
-    }
-
-    public function renderButton(
-        \Twig_Environment $environment,
-        string $name,
-        ?string $type = null
-    ) {
-        return $environment->render('layout/components/button.html.twig', [
-            'name' => $name,
-            'type' => $type,
-        ]);
-    }
-
-    public function renderBox(
-        \Twig_Environment $environment,
-        string $content = null,
-        string $title = null,
-        $entity = null
-    ) {
-        return $environment->render('layout/components/box.html.twig', [
-            'content' => $content,
+        return $environment->render('@BaseAdmin/layout/components/box.html.twig', array_merge($context, [
             'title' => $title,
-            'entity' => $entity
-        ]);
+        ]));
     }
 
-    public function renderIcon(
-        \Twig_Environment $environment,
-        string $iconName,
-        $type = null
-    ) {
-        return $environment->render('layout/components/icon.html.twig', [
-            'icon_name' => $iconName,
-            'type' => $type,
-        ]);
+    public function entityBox(\Twig_Environment $environment, array $context = [], $title = null, $entity = null, $vote = null)
+    {
+        return $environment->render('@BaseAdmin/layout/components/entity_box.html.twig', array_merge($context, [
+            'title' => $title ?? $context['title'] ?? null,
+            'entity' => $entity ?? $context['entity'] ?? null,
+            'vote' => $vote ?? $context['vote'] ?? false,
+        ]));
+    }
+
+    public function entityFormBox(\Twig_Environment $environment, array $context = [], $title = null, $entity = null, $useVoters = null, $form = null)
+    {
+        return $environment->render('@BaseAdmin/layout/components/entity_form_box.html.twig', array_merge($context, [
+            'title' => $title ?? $context['title'] ?? null,
+            'entity' => $entity ?? $context['entity'] ?? null,
+            'form' => $form ?? $context['form'] ?? null,
+            'vote' => $useVoters ?? $context['vote'] ?? false,
+        ]));
     }
 }

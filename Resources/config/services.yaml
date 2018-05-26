@@ -11,3 +11,7 @@ services:
     K3ssen\BaseAdminBundle\:
         resource: '../../*'
         exclude: '../../{Entity,Migrations,Tests}'
+
+    K3ssen\BaseAdminBundle\Router\BaseAdminRouter:
+        decorates: 'router'
+        arguments: ['@K3ssen\BaseAdminBundle\Router\BaseAdminRouter.inner']
