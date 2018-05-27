@@ -31,7 +31,7 @@ abstract class CrudController implements ContainerAwareInterface
      * Returns a RedirectResponse to the given route with the given parameters.
      * Overwrites Controller-trait to allow parameters as object as well.
      */
-    protected function redirectToRoute(string $route, $parameters = array(), int $status = 302): RedirectResponse
+    protected function redirectToRoute(string $route, $parameters = [], int $status = 302): RedirectResponse
     {
         return $this->redirect($this->generateUrl($route, $parameters), $status);
     }
@@ -40,7 +40,7 @@ abstract class CrudController implements ContainerAwareInterface
      * Generates a URL from the given parameters.
      * Overwrites Controller-trait to allow parameters as object as well.
      */
-    protected function generateUrl(string $route, $parameters = array(), int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
+    protected function generateUrl(string $route, $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
