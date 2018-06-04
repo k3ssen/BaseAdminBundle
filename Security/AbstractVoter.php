@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace K3ssen\BaseAdminBundle\Security;
 
-use K3ssen\BaseAdminBundle\EntityTraits\BlameableInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,11 +34,6 @@ abstract class AbstractVoter implements VoterInterface
     }
 
     abstract protected function voteOnAttribute($attribute, $object = null): ?bool;
-
-    protected function isCreator($object): bool
-    {
-        return $object instanceof BlameableInterface && $object->getCreatedBy() === $this->getUser();
-    }
 
     protected function isSuperAdmin(): bool
     {

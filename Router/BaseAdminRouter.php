@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace K3ssen\BaseAdminBundle\Router;
 
+use K3ssen\BaseAdminBundle\Model\IdentifiableInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
@@ -23,10 +24,17 @@ class BaseAdminRouter implements RouterInterface
 
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        if (is_object($parameters) && method_exists($parameters, 'getId')) {
-            $parameters = [
-                'id' => $parameters->getId(),
-            ];
+        if (is_object($parameters)) {
+            $idName = 'id';
+            if ($parameters instanceof IdentifiableInterface) {
+                $idName = $parameters::getIdName();
+            }
+            $getter = 'get'.ucfirst($idName);
+            if (method_exists($parameters, $getter)) {
+                $parameters = [
+                    $idName => $parameters->$getter(),
+                ];
+            }
         }
         return $this->router->generate($name, $parameters, $referenceType);
     }

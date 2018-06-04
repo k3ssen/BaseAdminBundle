@@ -1,21 +1,18 @@
-<div class="box">
-    <div class="{{ box_header_class|default('box-header with-border') }}">
-        {% block box_header %}
-            <h3 class="box-title">
-                {% block box_title %}
-                    {{ title|default('') }}
-                {% endblock %}
-            </h3>
-            <div class="box-tools pull-right">
-                {% block box_tools %}{% endblock %}
-            </div>
-        {% endblock %}
-    </div>
-    <div class="box-body">
-        {% block box_body %}
-            {% block main_content %}
-                {{ content|default('')|raw }}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    {% block box_header %}
+        <h3 class="box-title">
+            {% block box_title %}
+                {{ title|default('') }}
             {% endblock %}
-        {% endblock %}
-    </div>
+        </h3>
+    {% endblock %}
+<div class="mb-2 mb-md-0">
+    {% block box_tools %}{% endblock %}
 </div>
+</div>
+{% block box_body %}
+    {% block main_content %}
+        {{ content|default('')|raw }}
+    {% endblock %}
+{% endblock %}

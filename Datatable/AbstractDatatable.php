@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sg\DatatablesBundle\Datatable\AbstractDatatable as SgDatatable;
 use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
 use Doctrine\ORM\QueryBuilder;
+use Sg\DatatablesBundle\Datatable\Style;
 use Sg\DatatablesBundle\Response\DatatableResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -23,12 +24,14 @@ abstract class AbstractDatatable extends SgDatatable
     protected const EDIT_ACTION = true;
     protected const SHOW_ACTION = true;
 
-    protected const DELETE_ACTION_STYLE = 'btn btn-sm btn-danger';
-    protected const EDIT_ACTION_STYLE = 'btn btn-sm btn-warning';
-    protected const SHOW_ACTION_STYLE = 'btn btn-sm btn-default';
+    protected const TABLE_CLASSES = 'table table-condensed table-responsive-sm';
 
-    protected const DELETE_ACTION_ICON = 'glyphicon glyphicon-trash';
-    protected const EDIT_ACTION_ICON = 'glyphicon glyphicon-pencil';
+    protected const DELETE_ACTION_STYLE = 'btn btn-danger';
+    protected const EDIT_ACTION_STYLE = 'btn btn-warning';
+    protected const SHOW_ACTION_STYLE = 'btn btn-secondary';
+
+    protected const DELETE_ACTION_ICON = 'fa fa-trash';
+    protected const EDIT_ACTION_ICON = 'fa fa-pencil';
     protected const SHOW_ACTION_ICON = 'fa fa-search-plus';
 
     protected const DELETE_ACTION_TITLE = 'Delete'; //TODO: find existing translations
@@ -86,7 +89,9 @@ abstract class AbstractDatatable extends SgDatatable
         $this->ajax->set($this->getAjaxOptions($options));
 
         $this->options->set(array_merge(
-            ['classes' => 'table table-condensed'],
+            [
+                'classes' => static::TABLE_CLASSES,
+            ],
             $options
         ));
 
@@ -112,7 +117,7 @@ abstract class AbstractDatatable extends SgDatatable
 
     protected function getAjaxUrl($options = []): string
     {
-        return $this->router->generate($this->getRoute('result'), ['entityName' => $this->getEntityName()]);
+        return $this->router->generate($this->getRoute('result'));
     }
 
     protected function addActions(array $options = []): void
@@ -123,7 +128,7 @@ abstract class AbstractDatatable extends SgDatatable
                 'title' => $this->translator->trans('sg.datatables.actions.title'),
                 'actions' => $actions,
                 'class_name' => 'action-column',
-                'width' => '100px',
+                'width' => '180px',
             ])
         ;
     }

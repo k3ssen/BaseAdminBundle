@@ -4,88 +4,118 @@
         <meta charset="UTF-8">
         <title>{% block title %}{{ title|default('TODO: set title') }}{% endblock %}</title>
         {% block stylesheets %}
-            {# Bootstrap #}
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            {# Bootstrap 4 #}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+            <style>
+                .sidebar {
+                    position: fixed;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 100; /* Behind the navbar */
+                    padding: 0;
+                    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+                }
+
+                .sidebar-sticky {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 48px; /* Height of navbar */
+                    height: calc(100vh - 48px);
+                    padding-top: .5rem;
+                    overflow-x: hidden;
+                    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+                }
+                .sidebar .nav-link {
+                    font-weight: 500;
+                    color: #333;
+                }
+                .sidebar .nav-link.active {
+                    color: #007bff;
+                }
+            </style>
+
             {# Datatables#}
-            <link rel="stylesheet" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/fc-3.2.2/fh-3.1.2/r-2.1.0/datatables.min.css">
+            <link rel="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css">
-            <link rel="stylesheet" href="https://cdn.rawgit.com/noelboss/featherlight/1.7.1/release/featherlight.min.css">
+
+            {#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.css">#}
+            {#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css">#}
+            {#<link rel="stylesheet" href="https://cdn.rawgit.com/noelboss/featherlight/1.7.1/release/featherlight.min.css">#}
             {# AdminLTE #}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.2/css/AdminLTE.min.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.2/css/skins/skin-blue.min.css">
             {# Select2#}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css">
             <style>
                 .select2-selection{
                     height: 34px !important;
-                    border-radius: 0!important;
                 }
                 .select2.select2-container{
                     width: 100% !important;
                 }
             </style>
         {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">App-name & logo</a>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="#">Log in / Sign out</a>
+                </li>
+            </ul>
+        </nav>
 
-        {% block header_javascripts %}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.2/js/adminlte.min.js"></script>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+                            {% include '@BaseAdmin/layout/menu-items.html.twig' %}
+                        </ul>
+                    </div>
+                </nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                        {% include '@BaseAdmin/layout/flash_messages.html.twig' %}
+                        <h1>
+                            {{ block('title') }}
+                            <small>{% block sub_title %}{{ sub_title|default('') }}{% endblock %}</small>
+                        </h1>
+                        {% block content %}{% endblock %}
+                    </div>
+                </main>
+            </div>
+        </div>
+        {% block javascripts %}
+            {# jQuery 3, popper and bootstrap: all required for bootstrap 4  -> bootstrap only requires jquery-slim, but full jquery is needed for datatables #}
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+            {# Needed for datatables #}
+            <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+
             {#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.js" charset="UTF-8"></script>#}
-            <script src="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/fc-3.2.2/fh-3.1.2/r-2.1.0/datatables.min.js"></script>
+            {#<script src="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/fc-3.2.2/fh-3.1.2/r-2.1.0/datatables.min.js"></script>#}
             {#<script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>#}
             {#<script src="https://cdn.rawgit.com/noelboss/featherlight/1.7.1/release/featherlight.min.js"></script>#}
 
-            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-            {# Select2#}
+            {#<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>#}
+            {#Select2#}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
 
             <script src="{{ asset('bundles/sgdatatables/js/pipeline.js') }}"></script>
 
-            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-        {% endblock %}
-    </head>
+            {#<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>#}
 
-    <body class="hold-transition skin-blue sidebar-mini">
-        {% block body %}
-            <div class="wrapper">
-                {% include '@BaseAdmin/layout/header.html.twig' %}
-                {% include '@BaseAdmin/layout/menu.html.twig' %}
-                <!-- Content Wrapper. Contains page content -->
-                <div class="content-wrapper">
-                    <!-- Content Header (Page header) -->
-                    <section class="content-header">
-                        <h1>
-                            {{ block('title') }}
-                            <small>{% block sub_title %}{{ sub_title|default('') }}{% endblock %}</small>
-                        </h1>
-                        {% if block('breadcrumbs') is defined %}
-                            {{ block('breadcrumbs') }}
-                        {% endif %}
-                        {#<ol class="breadcrumb">#}
-                            {#{% block breadcrumbs %}#}
-                                {#<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>#}
-                            {#{% endblock %}#}
-                        {#</ol>#}
-                    </section>
-                    <!-- Main content -->
-                    <section class="content">
-                        {% include '@BaseAdmin/layout/flash_messages.html.twig' %}
-                        {% block content %}{% endblock %}
-                    </section>
-                </div>
-            </div>
+            <script>
+                (function($){
+                    $('[data-role="select2"]').select2();
+                })(jQuery);
+            </script>
         {% endblock %}
     </body>
-
-    {% block javascripts %}
-        <script>
-            (function($){
-                $('[data-role="select2"]').select2();
-            })(jQuery);
-        </script>
-    {% endblock %}
 </html>
