@@ -1,4 +1,5 @@
 {% set current_route = app.request.attributes.get('_route') %}
+{% set entity = entity|default(null) %}
 {% if action_prefix is not defined %}
     {% set entity_name = class_name(entity)|tabalize %}
     {% set subdir_part = current_route | split(entity_name) %}

@@ -1,0 +1,12 @@
+<div class="form-group row">
+    <label class="col-md-2">
+        {% block label %}
+            {{ label|default('') }}
+        {% endblock %}
+    </label>
+    <div class="col-md-10">
+        {% block main %}
+            {{ value|default('') }}
+        {% endblock %}
+    </div>
+</div>

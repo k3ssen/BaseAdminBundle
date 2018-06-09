@@ -1,7 +1,7 @@
-{% extends '@BaseAdmin/layout/components/entity_box.html.twig' %}
+{% extends '@BaseAdmin/components/entity_box.html.twig' %}
 
 {% block box_body %}
-    {% block main_content %}{% endblock %}
+    {% block main %}{% endblock %}
     {% block box_body_form %}
         {{ form_start(form) }}
         {% block box_body_form_widget %}

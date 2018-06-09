@@ -5,64 +5,53 @@ namespace K3ssen\BaseAdminBundle\Twig;
 
 class ComponentExtension extends \Twig_Extension
 {
-    protected static $optionsEnvAndSafe = [
-        'needs_environment' => true,
-        'needs_context' => true,
-        'is_safe' => ['html']
-    ];
+    /**
+     * @return array|Component[]
+     */
+    protected function getComponents()
+    {
+        if (isset($this->components)) {
+            return $this->components;
+        }
+        $this->components = [];
+        // Rather than defining the component-objects directly, the ComponentByMethodDefinition is used so that we can
+        // use this object (in template files) for references/auto-completion.
+        $componentInfo = new ComponentByMethodDefinition();
+        $componentInfoReflection = new \ReflectionClass($componentInfo);
+        foreach ($componentInfoReflection->getMethods() as $method) {
+            if (!$method->isPublic()) {
+                continue;
+            }
+            $name = $method->getName();
+            $argumentNames = [];
+            foreach ($method->getParameters() as $param) {
+                if (!$param->isOptional()) {
+                    throw new \RuntimeException(sprintf('All parameters inside public methods in %s must be optional, but parameter %s is required', ComponentByMethodDefinition::class, $param->getName()));
+                }
+                $argumentNames[] = $param->getName();
+            }
+            $templateFile = $method->invoke($componentInfo);
+            $this->components[] = new Component($name, $templateFile, $argumentNames);
+        }
+        return $this->components;
+    }
 
     public function getTokenParsers()
     {
+        $components = $this->getComponents();
         return [
-            new SetComponentParser($this->getFunctions())
+            new IncludeComponentParser($components),
+            new EmbedComponentParser($components),
         ];
     }
 
     public function getFunctions()
     {
-        //Note that functions without key (string) won't be be used by the SetComponentParser
-        return [
-            '@BaseAdmin/layout/components/box.html.twig' => new \Twig_SimpleFunction(
-                'box',
-                [$this, 'box'],
-                static::$optionsEnvAndSafe
-            ),
-            '@BaseAdmin/layout/components/entity_box.html.twig' => new \Twig_SimpleFunction(
-                'entity_box',
-                [$this, 'entityBox'],
-                static::$optionsEnvAndSafe
-            ),
-            '@BaseAdmin/layout/components/entity_form_box.html.twig' => new \Twig_SimpleFunction(
-                'entity_form_box',
-                [$this, 'entityFormBox'],
-                static::$optionsEnvAndSafe
-            ),
-        ];
-    }
-
-    public function box(\Twig_Environment $environment, array $context = [], string $title = null)
-    {
-        return $environment->render('@BaseAdmin/layout/components/box.html.twig', array_merge($context, [
-            'title' => $title,
-        ]));
-    }
-
-    public function entityBox(\Twig_Environment $environment, array $context = [], $title = null, $entity = null, $vote = null)
-    {
-        return $environment->render('@BaseAdmin/layout/components/entity_box.html.twig', array_merge($context, [
-            'title' => $title ?? $context['title'] ?? null,
-            'entity' => $entity ?? $context['entity'] ?? null,
-            'vote' => $vote ?? $context['vote'] ?? false,
-        ]));
-    }
-
-    public function entityFormBox(\Twig_Environment $environment, array $context = [], $title = null, $entity = null, $useVoters = null, $form = null)
-    {
-        return $environment->render('@BaseAdmin/layout/components/entity_form_box.html.twig', array_merge($context, [
-            'title' => $title ?? $context['title'] ?? null,
-            'entity' => $entity ?? $context['entity'] ?? null,
-            'form' => $form ?? $context['form'] ?? null,
-            'vote' => $useVoters ?? $context['vote'] ?? false,
-        ]));
+        $functions = [];
+        foreach ($this->getComponents() as $component) {
+            // Note: setting functions dynamically won't have auto-completion :(
+            $functions[] = $component->getTwigSimpleFunction();
+        }
+        return $functions;
     }
 }
