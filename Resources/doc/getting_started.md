@@ -12,27 +12,17 @@ BaseAdminBundle
 
 ## Getting Started
 
-Make sure `"k3ssen/BaseAdminBundle": "dev-master"` and 
-the repository to this git are included in your `composer.json`
-file:
+Add this git repository to your `composer.json` file:
 
     //...
-    
-    "require": {
-        //...
-        "k3ssen/BaseAdminBundle": "dev-master"
-    }
-    
-    //...
-
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/k3ssen/BaseAdminBundle"
+            "url": "https://github.com/k3ssen/BaseAdminBundle.git"
         }
     ],
     
-Run `composer install` in your console.
+Run `composer require k3ssen/base-admin:dev-master --dev` in your console.
 
 Symfony Flex should add the bundle automatically to your `config/bundles.php`.
 To make sure, open this file and check if the following line 
