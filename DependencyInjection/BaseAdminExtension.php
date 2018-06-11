@@ -5,11 +5,34 @@ namespace K3ssen\BaseAdminBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 
-class BaseAdminExtension extends Extension
+class BaseAdminExtension extends Extension implements PrependExtensionInterface
 {
+    public function prepend(ContainerBuilder $container)
+    {
+        foreach ($container->getExtensionConfig('security') as $securityConfig) {
+            $strategy = $securityConfig['access_decision_manager']['strategy'] ?? null;
+            if ($strategy) {
+                break;
+            }
+        }
+        if (!isset($strategy)) {
+            $strategy = AccessDecisionManager::STRATEGY_AFFIRMATIVE;
+        }
+
+        $container->setParameter('base_admin.voter_strategy', $strategy);
+//        dump($container->getExtensionConfig('security'));
+//        $securityDecisionManagerConfig = $container->getExtensionConfig('security')[0]['access_decision_manager'];
+//        dump($securityDecisionManagerConfig);
+//        $strategy = $securityDecisionManagerConfig['strategy'];
+//        dump($strategy);
+//        exit();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -20,6 +43,9 @@ class BaseAdminExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+
+//        dump($container);
+//        exit();
 
         foreach ($config as $key => $value) {
             $container->setParameter('base_admin.'.$key, $value);

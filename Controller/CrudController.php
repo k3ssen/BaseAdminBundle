@@ -6,6 +6,7 @@ namespace  K3ssen\BaseAdminBundle\Controller;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManager;
+use K3ssen\BaseAdminBundle\Model\SoftDeleteableInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -27,6 +28,7 @@ abstract class CrudController implements ContainerAwareInterface
     {
         return $this->container->getParameter($name);
     }
+
     /**
      * Returns a RedirectResponse to the given route with the given parameters.
      * Overwrites Controller-trait to allow parameters as object as well.
@@ -111,7 +113,10 @@ abstract class CrudController implements ContainerAwareInterface
         $em = $this->getEntityManager();
         $em->beginTransaction();
         try {
-            // TODO: if we need to deal with softdeleteable, then we need to set 'deletedAt' first, so that a 'hard-delete' will be attempted
+            // if an object is softdeleteable, then set 'deletedAt' first, so that a 'hard-delete' will be attempted.
+            if ($object instanceof SoftDeleteableInterface) {
+                $object->setDeletedAt(new \DateTime());
+            }
             $em->remove($object);
             $em->flush();
             $em->rollback();

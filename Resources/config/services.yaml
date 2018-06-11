@@ -7,8 +7,17 @@ services:
         public: false
         bind:
             $projectDir: '%kernel.project_dir%'
+#            $voterStrategy: '%base_admin.voter_strategy%'
+
+#    _instanceof:
+#        K3ssen\BaseAdminBundle\Security\VoterWithStrategyInterface:
+#            calls:
+#                - method: setStrategy
+#                  arguments:
+#                      - '%base_admin.voter_strategy%'
 
     Sg\DatatablesBundle\Response\DatatableResponse: '@sg_datatables.response'
+
 
     K3ssen\BaseAdminBundle\:
         resource: '../../*'
@@ -17,3 +26,7 @@ services:
     K3ssen\BaseAdminBundle\Router\BaseAdminRouter:
         decorates: 'router'
         arguments: ['@K3ssen\BaseAdminBundle\Router\BaseAdminRouter.inner']
+
+#    K3ssen\BaseAdminBundle\Security\AbstractVoter:
+#        arguments:
+#            $voterStrategy: '%base_admin.voter_strategy%'

@@ -5,7 +5,7 @@ namespace K3ssen\BaseAdminBundle\Twig;
 
 use Symfony\Component\Form\FormView;
 
-class ComponentByMethodDefinition
+class ComponentsAsMethods
 {
     public function box(string $title = null)
     {
