@@ -67,7 +67,7 @@ abstract class CrudController implements ContainerAwareInterface
     {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($form->getData());
+            $this->saveObject($form->getData());
             $this->addFlash('success', static::MESSAGE_SAVED);
             return true;
         }
@@ -80,7 +80,7 @@ abstract class CrudController implements ContainerAwareInterface
         if ($form->isSubmitted() && $form->isValid()) {
             $object = $form->getData();
             if ($this->isDeletable($object)) {
-                $this->delete($object);
+                $this->deleteObject($object);
                 $this->addFlash('success', static::MESSAGE_DELETED);
                 return true;
             } else {
@@ -90,14 +90,14 @@ abstract class CrudController implements ContainerAwareInterface
         return false;
     }
 
-    protected function save($object): void
+    protected function saveObject($object): void
     {
         $em = $this->getEntityManager();
         $em->persist($object);
         $em->flush();
     }
 
-    protected function delete($object): void
+    protected function deleteObject($object): void
     {
         $em = $this->getEntityManager();
         $em->remove($object);
