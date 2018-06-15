@@ -4,17 +4,11 @@ declare(strict_types=1);
 namespace K3ssen\BaseAdminBundle\Datatable;
 
 use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\EntityManagerInterface;
 use Sg\DatatablesBundle\Datatable\AbstractDatatable as SgDatatable;
 use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
 use Doctrine\ORM\QueryBuilder;
-use Sg\DatatablesBundle\Datatable\Style;
 use Sg\DatatablesBundle\Response\DatatableResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractDatatable extends SgDatatable
 {
@@ -39,23 +33,17 @@ abstract class AbstractDatatable extends SgDatatable
     protected const SHOW_ACTION_TITLE = 'sg.datatables.actions.show';
 
     protected const ID_NAME = 'id';
-    protected const ROUTE_ID_PARAMETER_NAME = self::ID_NAME;
 
     /** @var DatatableResponse */
     protected $responseService;
 
     protected $isBuilt = false;
 
-    public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $securityToken,
-        TranslatorInterface $translator,
-        RouterInterface $router,
-        EntityManagerInterface $em,
-        \Twig_Environment $twig,
-        DatatableResponse $responseService
-    ) {
-        parent::__construct($authorizationChecker, $securityToken, $translator, $router, $em, $twig);
+    /**
+     * @required
+     */
+    public function setResponseService(DatatableResponse $responseService)
+    {
         $this->responseService = $responseService;
     }
 
@@ -147,12 +135,17 @@ abstract class AbstractDatatable extends SgDatatable
         }
         return $actions;
     }
+    
+    protected function getRouteIdParameterName()
+    {
+        return static::ID_NAME;
+    }
 
     protected function getDeleteAction()
     {
         return [
             'route' => $this->getRoute('delete'),
-            'route_parameters' => [static::ROUTE_ID_PARAMETER_NAME => static::ID_NAME],
+            'route_parameters' => [$this->getRouteIdParameterName() => static::ID_NAME],
             'label' => null,
             'icon' => static::DELETE_ACTION_ICON,
             'attributes' => [
@@ -171,7 +164,7 @@ abstract class AbstractDatatable extends SgDatatable
     {
         return [
             'route' => $this->getRoute('edit'),
-            'route_parameters' => [static::ROUTE_ID_PARAMETER_NAME => static::ID_NAME],
+            'route_parameters' => [$this->getRouteIdParameterName() => static::ID_NAME],
             'label' => null,
             'icon' => static::EDIT_ACTION_ICON,
             'attributes' => [
@@ -190,7 +183,7 @@ abstract class AbstractDatatable extends SgDatatable
     {
         return [
             'route' => $this->getRoute('show'),
-            'route_parameters' => [static::ROUTE_ID_PARAMETER_NAME => static::ID_NAME],
+            'route_parameters' => [$this->getRouteIdParameterName() => static::ID_NAME],
             'label' => null,
             'icon' => static::SHOW_ACTION_ICON,
             'attributes' => [

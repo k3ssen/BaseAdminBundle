@@ -1,5 +1,4 @@
 # TODO: define aliased services explicitly, see: http://symfony.com/doc/current/bundles/best_practices.html#services
-
 services:
     _defaults:
         autowire: true

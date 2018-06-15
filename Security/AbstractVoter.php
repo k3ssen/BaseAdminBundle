@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace K3ssen\BaseAdminBundle\Security;
 
+use K3ssen\BaseAdminBundle\Model\BlameableEntityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -111,6 +112,14 @@ abstract class AbstractVoter implements VoterWithStrategyInterface
     protected function isLoggedIn(): bool
     {
         return $this->getUser() instanceof UserInterface;
+    }
+
+    protected function isCreator($object): bool
+    {
+        if ($object instanceof BlameableEntityInterface) {
+            return $object->getCreatedBy() === $this->getUser();
+        }
+        return false;
     }
 
     protected function getToken(): TokenInterface

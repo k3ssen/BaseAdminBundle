@@ -4,31 +4,17 @@ declare(strict_types=1);
 namespace K3ssen\BaseAdminBundle\Model;
 
 /**
- * Alternative to Gedmo\SoftDeleteable\SoftDeleteable, since that interface does not enforce any method.
- * This interface is compatible with trait: Gedmo\SoftDeleteable\Traits\SoftDeleteable
+ * Alternative to Gedmo\SoftDeleteable\SoftDeleteable, since that interface does not promise any method.
+ * This interface can be implemented by using SoftDeleteableEntityTrait
  */
 interface SoftDeleteableInterface
 {
     /**
-     * Sets deletedAt.
-     *
-     * @param \DateTime|null $deletedAt
-     *
-     * @return $this
+     * @return static
      */
-    public function setDeletedAt(\DateTime $deletedAt = null);
+    public function setDeletedAt(\DateTimeImmutable $deletedAt = null);
 
-    /**
-     * Returns deletedAt.
-     *
-     * @return \DateTime
-     */
-    public function getDeletedAt();
+    public function getDeletedAt(): ?\DateTimeImmutable;
 
-    /**
-     * Is deleted?
-     *
-     * @return bool
-     */
-    public function isDeleted();
+    public function isDeleted(): bool ;
 }

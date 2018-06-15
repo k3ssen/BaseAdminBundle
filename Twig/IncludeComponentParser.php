@@ -45,8 +45,7 @@ class IncludeComponentParser extends \Twig_TokenParser_Include
                     return $component;
                 }
             }
-            // If a name is used, a component must be found. Otherwise, the parser doesn't know what to render.
-            throw new \Twig_Error_Runtime(sprintf('The component name "%s" is not recognized', $componentName));
+            return null;
         }
         //If no name is used, then search components by twig template.
         foreach ($this->components as $component) {
@@ -58,19 +57,13 @@ class IncludeComponentParser extends \Twig_TokenParser_Include
     }
 
     /**
-     * For auto-completion and references, using an object could be useful:
-     * E.G. using object.component_name where object has a method component_name with information about its arguments.
-     * For rendering we'll only need to deal with component_name, so if we find a '.', we skip to the component part.
+     * For auto-completion and references, mapping an object to include could be helpful.
+     * E.G. By mapping ComponentsAsMethods to 'include', using "{% include." gives auto-completion
      */
     protected function skipObjectPart()
     {
         $stream = $this->parser->getStream();
         if ($stream->getCurrent()->test(\Twig_Token::PUNCTUATION_TYPE, '.')) {
-            $stream->next();
-            return;
-        }
-        if ($stream->look(1)->test(\Twig_Token::PUNCTUATION_TYPE, '.')) {
-            $stream->next();
             $stream->next();
         }
     }
