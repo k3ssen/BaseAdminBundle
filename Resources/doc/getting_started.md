@@ -16,6 +16,12 @@ Run `composer require k3ssen/base-admin:dev-master --dev` in your console.
 
 Symfony Flex should add the bundle automatically to your `config/bundles.php`.
 
+If installation fails due to minumum-stability, you could add the 
+following settings to your composer.json file first:
+    
+    "minimum-stability": "dev",
+    "prefer-stable": true 
+
 ### Quick start with example template
 
 If you're creating a new project, you could use the following line
