@@ -20,7 +20,7 @@
         "symfony/orm-pack": "~1.0"
     },
     "suggest": {
-        "k3ssen/generator": "dev-master"
+        "k3ssen/extended-generator": "dev-master"
     },
     "autoload": {
         "psr-4": { "K3ssen\\BaseAdminBundle\\": "" },

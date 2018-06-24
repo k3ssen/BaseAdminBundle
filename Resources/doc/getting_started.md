@@ -12,26 +12,9 @@ BaseAdminBundle
 
 ## Getting Started
 
-Add this git repository to your `composer.json` file:
-
-    //...
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/k3ssen/BaseAdminBundle.git"
-        }
-    ],
-    
 Run `composer require k3ssen/base-admin:dev-master --dev` in your console.
 
 Symfony Flex should add the bundle automatically to your `config/bundles.php`.
-To make sure, open this file and check if the following line 
-is added to the array:
-
-    
-    K3ssen\BaseAdminBundle\BaseAdminBundle::class => ['all' => true],
-    
-(add this line yourself if missing)
 
 ### Quick start with example template
 
@@ -55,9 +38,9 @@ the following bundles:
 for datatables.  
 The `AbstractDatatable` needs this bundle to work.
 - [StofDoctrineExtensionsBundle](http://symfony.com/doc/master/bundles/StofDoctrineExtensionsBundle/index.html).  
-The `CrudController` takes SoftDeleteable into account, it won't break
+The `CrudController` takes SoftDeleteable into account. It won't break
 without, so it's fully optional to use this bundle.
-- [CrudGeneratorBundle](https://github.com/k3ssen/CrudGeneratorBundle)  
-The CrudGenerator is built together with this bundle. It
+- [ExtendedGeneratorBundle](https://github.com/k3ssen/ExtendedGeneratorBundle)  
+The ExtendedGeneratorBundle is built together with this bundle. It
 lets you generate files for quickly creating your application.
-Using the CrudGeneratorBundle is fully optional.
+Using the ExtendedGeneratorBundle is optional.
