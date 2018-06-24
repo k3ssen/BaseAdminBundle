@@ -1,16 +1,8 @@
-{# Just some example links - need to be replaced #}
-<li class="nav-item">
-    <a class="nav-link active" href="#">
-        Dashboard
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="#">
-        Orders
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="#">
-        Products
-    </a>
-</li>
+{% set current_route = app.request.get('_route') %}
+{% for name,route in index_routes() %}
+    <li class="nav-item">
+        <a class="nav-link {{ name~'_' in current_route ? 'active' : '' }}" href="{{ route.path }}">
+            {{ name | capitalize }}
+        </a>
+    </li>
+{% endfor %}

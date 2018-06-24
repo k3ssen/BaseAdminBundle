@@ -25,12 +25,6 @@ class BaseAdminExtension extends Extension implements PrependExtensionInterface
         }
 
         $container->setParameter('base_admin.voter_strategy', $strategy);
-//        dump($container->getExtensionConfig('security'));
-//        $securityDecisionManagerConfig = $container->getExtensionConfig('security')[0]['access_decision_manager'];
-//        dump($securityDecisionManagerConfig);
-//        $strategy = $securityDecisionManagerConfig['strategy'];
-//        dump($strategy);
-//        exit();
     }
 
     /**
@@ -43,9 +37,6 @@ class BaseAdminExtension extends Extension implements PrependExtensionInterface
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-
-//        dump($container);
-//        exit();
 
         foreach ($config as $key => $value) {
             $container->setParameter('base_admin.'.$key, $value);
