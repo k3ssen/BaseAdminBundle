@@ -15,23 +15,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('base_admin');
-//        $rootNode
-//            ->children()
-//                ->arrayNode('attributes')
-//                    ->arrayPrototype()
-//                        ->children()
-//                            ->arrayNode('meta_properties')->scalarPrototype()->end()->end()
-//                            ->enumNode('type')
-//                                ->values(['string', 'int', 'bool', 'object', 'array'])
-//                            ->end()
-//                            ->scalarNode('default')->end()
-//                        ->end()
-//                        //Allow extra's for custom usage
-//                        ->scalarPrototype()->end()
-//                    ->end()
-//                ->end()
-//            ->end()
-//        ;
+        // There might be some configs here later on
         return $treeBuilder;
     }
 }
